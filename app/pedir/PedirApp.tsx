@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import type { CajaParaPedir } from "@/lib/pedidos";
 import MarcaInstrumentARG from "@/components/MarcaInstrumentARG";
 import FirmaPad from "@/components/FirmaPad";
+import TemaToggle from "@/components/TemaToggle";
 import { crearPedidoQR } from "./acciones";
 
 type Etapa = "intro" | "cajas" | "caja" | "resumen" | "datos" | "listo";
@@ -106,11 +107,15 @@ export default function PedirApp({ cajas, claveQR }: { cajas: CajaParaPedir[]; c
             <span className="w-2" />
           )}
           <MarcaInstrumentARG tam="chica" />
-          {totalPiezas > 0 && etapa !== "listo" && (
-            <button type="button" className="ml-auto btn px-3 text-sm" onClick={() => setEtapa("resumen")} aria-label={`Ver el pedido: ${totalPiezas} piezas`}>
-              🧾 {totalPiezas}
-            </button>
-          )}
+          <div className="ml-auto flex items-center gap-2">
+            {totalPiezas > 0 && etapa !== "listo" && (
+              <button type="button" className="btn px-3 text-sm" onClick={() => setEtapa("resumen")} aria-label={`Ver el pedido: ${totalPiezas} piezas`}>
+                🧾 {totalPiezas}
+              </button>
+            )}
+            {/* con texto en la primera pantalla; en las demás solo el ícono, para que entre con «Atrás» y el pedido */}
+            <TemaToggle conTexto={etapa === "cajas"} />
+          </div>
         </div>
       </header>
 

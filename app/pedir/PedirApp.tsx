@@ -98,10 +98,10 @@ export default function PedirApp({ cajas, claveQR }: { cajas: CajaParaPedir[]; c
   return (
     <div className="min-h-dvh pb-32">
       <header className="sticky top-0 z-30 bg-superficie border-b border-borde">
-        <div className="mx-auto max-w-xl px-4 h-14 flex items-center gap-3">
+        <div className="mx-auto max-w-xl px-3 min-[400px]:px-4 h-14 flex items-center gap-2 min-[400px]:gap-3">
           {etapa !== "cajas" && etapa !== "listo" ? (
-            <button type="button" className="btn px-3" onClick={() => setEtapa(etapa === "datos" ? "resumen" : "cajas")}>
-              ← Atrás
+            <button type="button" className="btn px-3 shrink-0 whitespace-nowrap" aria-label="Atrás" onClick={() => setEtapa(etapa === "datos" ? "resumen" : "cajas")}>
+              ←<span className="hidden min-[400px]:inline">&nbsp;Atrás</span>
             </button>
           ) : (
             <span className="w-2" />
@@ -109,7 +109,7 @@ export default function PedirApp({ cajas, claveQR }: { cajas: CajaParaPedir[]; c
           <MarcaInstrumentARG tam="chica" />
           <div className="ml-auto flex items-center gap-2">
             {totalPiezas > 0 && etapa !== "listo" && (
-              <button type="button" className="btn px-3 text-sm" onClick={() => setEtapa("resumen")} aria-label={`Ver el pedido: ${totalPiezas} piezas`}>
+              <button type="button" className="btn px-3 text-sm shrink-0 whitespace-nowrap" onClick={() => setEtapa("resumen")} aria-label={`Ver el pedido: ${totalPiezas} ${totalPiezas === 1 ? "pieza" : "piezas"}`}>
                 🧾 {totalPiezas}
               </button>
             )}

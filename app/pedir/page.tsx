@@ -20,7 +20,7 @@ export default async function PedirPage({ searchParams }: { searchParams: Promis
   const permitido = !!equipo || (!!clave && iguales(k, clave));
   if (!permitido)
     return (
-      <main className="min-h-dvh grid place-items-center p-4 bg-white text-black">
+      <main className="min-h-dvh grid place-items-center p-4 bg-fondo text-texto">
         <div className="max-w-sm text-center space-y-4">
           <MarcaInstrumentARG />
           <p>Para hacer un pedido escaneá el QR del taller. Si no lo tenés, pedíselo a quien administra el taller.</p>

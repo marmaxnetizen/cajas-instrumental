@@ -5,6 +5,7 @@ import { nombreLinea, pedidoPorToken } from "@/lib/pedidos";
 import { fecha, fechaHora } from "@/lib/formato";
 import { ESTADO_PEDIDO_LABEL } from "@/lib/tipos";
 import MarcaInstrumentARG from "@/components/MarcaInstrumentARG";
+import TemaToggle from "@/components/TemaToggle";
 import { EstadoPedidoChip } from "@/components/EstadoPedido";
 import CancelarCliente from "./CancelarCliente";
 
@@ -29,8 +30,9 @@ export default async function SeguimientoPage({ params }: { params: Promise<{ to
   return (
     <div className="min-h-dvh">
       <header className="border-b border-borde bg-superficie">
-        <div className="mx-auto max-w-xl px-4 h-14 flex items-center">
+        <div className="mx-auto max-w-xl px-4 h-14 flex items-center justify-between">
           <MarcaInstrumentARG tam="chica" />
+          <TemaToggle />
         </div>
       </header>
       <main className="mx-auto max-w-xl px-4 py-5 space-y-5">

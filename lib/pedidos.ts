@@ -2,6 +2,7 @@ import "server-only";
 import { db, sinError } from "./db";
 import { archivosDe, cargarCatalogo, composicionDe, usosDe } from "./datos";
 import { IMAGENES } from "./formato";
+import { fotoCatalogo } from "./fotos-catalogo";
 import type { EstadoPedido, Pedido } from "./tipos";
 
 const SELECT_PEDIDO = "*, items:pedido_items(*), piezas:pedido_piezas(*), entregas(*, piezas:entrega_piezas(*))";
@@ -29,7 +30,7 @@ export interface CajaParaPedir {
   nombre: string;
   descripcion: string | null;
   fotoId: string | null;
-  piezas: { id: string; nombre: string; alias: string | null; tipo: string; compartida: string[]; medidas: { id: string; nombre: string }[] }[];
+  piezas: { id: string; nombre: string; alias: string | null; tipo: string; foto: string | null; compartida: string[]; medidas: { id: string; nombre: string }[] }[];
 }
 
 export async function catalogoParaPedir(): Promise<CajaParaPedir[]> {
@@ -46,6 +47,7 @@ export async function catalogoParaPedir(): Promise<CajaParaPedir[]> {
       nombre: inst.nombre,
       alias: inst.alias,
       tipo: inst.tipo,
+      foto: fotoCatalogo(inst.codigo),
       compartida: usosDe(cat, inst.id).map((u) => u.caja.nombre).filter((n) => n !== c.nombre),
       medidas: inst.tipo === "medidas" ? inst.componentes.filter((x) => x.clase === "medida").map((x) => ({ id: x.id, nombre: x.codigo_o_medida })) : [],
     })),

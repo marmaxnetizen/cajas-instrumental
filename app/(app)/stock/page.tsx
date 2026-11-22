@@ -107,8 +107,10 @@ export default async function StockPage({ searchParams }: { searchParams: Promis
               {lista.map((i) => {
                 const usos = usosDe(cat, i.id);
                 const comps = i.componentes.filter((c) => c.clase === (i.tipo === "medidas" ? "medida" : "pieza"));
+                const completo = stockCompleto(i);
+                const sinStock = completo <= 0;
                 return (
-                  <tr key={i.id}>
+                  <tr key={i.id} className={sinStock ? "bg-falta-bg" : undefined}>
                     <td>
                       <Link href={`/instrumental/${i.id}`} className="font-semibold hover:underline">
                         {i.nombre}
@@ -116,7 +118,10 @@ export default async function StockPage({ searchParams }: { searchParams: Promis
                       <p className="font-mono text-xs text-tenue">{i.codigo}</p>
                     </td>
                     <td>{TIPO_LABEL[i.tipo]}</td>
-                    <td className="text-right font-mono font-semibold text-lg">{stockCompleto(i)}</td>
+                    <td className={`text-right font-mono font-semibold text-lg ${sinStock ? "text-falta" : ""}`}>
+                      {completo}
+                      {sinStock && <span className="block text-xs font-sans font-semibold">✕ {completo < 0 ? "Negativo" : "No hay"}</span>}
+                    </td>
                     <td>
                       <div className="flex flex-wrap gap-1 items-center">
                         {usos.length > 1 && <Compartido cajas={usos.map((u) => u.caja.codigo)} />}
@@ -144,7 +149,10 @@ export default async function StockPage({ searchParams }: { searchParams: Promis
                           <ul className="mt-2 space-y-2">
                             {comps.map((c) => (
                               <li key={c.id} className="flex items-center justify-end gap-3">
-                                <span className="font-mono text-sm">{nombreComponente(c)}</span>
+                                <span className={`font-mono text-sm ${c.stock <= 0 ? "text-falta font-semibold" : ""}`}>
+                                  {c.stock <= 0 ? "✕ " : ""}
+                                  {nombreComponente(c)}
+                                </span>
                                 <ControlStock objetivo="stock" id={c.id} valor={c.stock} etiqueta={`Stock de ${i.nombre} ${nombreComponente(c)}`} />
                               </li>
                             ))}

@@ -13,7 +13,7 @@ type Carrito = Record<string, Linea>;
 type Pieza = CajaParaPedir["piezas"][number];
 
 const CLAVE_CARRITO = "pedido-instrumentarg-v2";
-const DURACION_INTRO = 5000;
+const DURACION_INTRO = 3000;
 const clave = (cajaId: string, instId: string, compId: string | null) => `${cajaId}:${instId}:${compId ?? ""}`;
 const limitar = (n: number) => Math.max(0, Math.min(9999, Math.trunc(n) || 0));
 
@@ -59,6 +59,15 @@ export default function PedirApp({ cajas, claveQR }: { cajas: CajaParaPedir[]; c
   useEffect(() => {
     setCarrito(leerCarrito());
   }, []);
+  // Mientras se ve el logo, se precargan las fotos de las cajas y de cada pieza: después todo abre al instante.
+  useEffect(() => {
+    const urls = cajas.flatMap((c) => [c.fotoId ? `/pedir/foto/${c.fotoId}` : null, ...c.piezas.map((p) => p.foto)]).filter((u): u is string => !!u);
+    for (const u of new Set(urls)) {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = u;
+    }
+  }, [cajas]);
   useEffect(() => {
     if (etapa !== "intro") return;
     const t = setTimeout(() => setEtapa("cajas"), DURACION_INTRO);
@@ -228,6 +237,20 @@ function ElegirCaja({ cajas, onElegir }: { cajas: CajaParaPedir[]; onElegir: (id
   );
 }
 
+/** Foto de la pieza para reconocerla de un vistazo; sin foto, un recuadro neutro del mismo tamaño para que la lista no se desalinee. */
+function FotoPieza({ src, nombre }: { src: string | null; nombre: string }) {
+  const clase = "w-20 h-20 shrink-0 rounded-lg border border-borde bg-white";
+  if (!src) {
+    return (
+      <span className={`${clase} grid place-items-center text-2xl text-neutral-400`} aria-hidden="true">
+        ⚙
+      </span>
+    );
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt={`Foto de ${nombre}`} width={80} height={80} decoding="async" className={`${clase} object-contain p-1`} />;
+}
+
 const TIPO_TEXTO: Record<string, string> = { simple: "Pieza simple", medidas: "Set completo", complejo: "Pieza compleja" };
 
 function PiezasDeCaja({
@@ -282,6 +305,7 @@ function PiezasDeCaja({
           return (
             <li key={p.id} className={`card p-3 space-y-2 ${n > 0 ? "border-acento" : ""}`}>
               <div className="flex items-center gap-3">
+                <FotoPieza src={p.foto} nombre={p.nombre} />
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold leading-tight">
                     <span className="font-mono text-tenue mr-1">

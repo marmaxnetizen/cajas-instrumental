@@ -3,6 +3,7 @@ import { cargarCatalogo, composicionDe, resumenDe, usosDe } from "@/lib/datos";
 import { nombreComponente, planArmadoCaja, stockCompleto, TIPO_LABEL } from "@/lib/calculos";
 import type { TipoInstrumental } from "@/lib/tipos";
 import { Cifra, Compartido, Etiqueta } from "@/components/Estado";
+import FotoInstrumental from "@/components/FotoInstrumental";
 import ControlStock from "@/components/ControlStock";
 import ArmarCaja from "./ArmarCaja";
 
@@ -112,10 +113,15 @@ export default async function StockPage({ searchParams }: { searchParams: Promis
                 return (
                   <tr key={i.id} className={sinStock ? "bg-falta-bg" : undefined}>
                     <td>
-                      <Link href={`/instrumental/${i.id}`} className="font-semibold hover:underline">
-                        {i.nombre}
-                      </Link>
-                      <p className="font-mono text-xs text-tenue">{i.codigo}</p>
+                      <div className="flex items-center gap-3">
+                        <FotoInstrumental codigo={i.codigo} nombre={i.nombre} tam="w-12 h-12" />
+                        <div className="min-w-0">
+                          <Link href={`/instrumental/${i.id}`} className="font-semibold hover:underline">
+                            {i.nombre}
+                          </Link>
+                          <p className="font-mono text-xs text-tenue">{i.codigo}</p>
+                        </div>
+                      </div>
                     </td>
                     <td>{TIPO_LABEL[i.tipo]}</td>
                     <td className={`text-right font-mono font-semibold text-lg ${sinStock ? "text-falta" : ""}`}>

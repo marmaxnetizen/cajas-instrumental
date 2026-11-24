@@ -4,7 +4,8 @@ import { db, sinError } from "@/lib/db";
 import { archivosDe, cargarCatalogo, usosDe } from "@/lib/datos";
 import { listarMovimientos } from "@/lib/historial";
 import { completosConComponentes, estadoEnCaja, filasComponentes, nombreComponente, stockCompleto, TIPO_LABEL } from "@/lib/calculos";
-import { fecha, fechaHora } from "@/lib/formato";
+import { fecha, fechaHora, IMAGENES } from "@/lib/formato";
+import FotoInstrumental from "@/components/FotoInstrumental";
 import { RESULTADO_LABEL, TIPOS_NOTA, type Inspeccion, type Nota } from "@/lib/tipos";
 import { Cifra, Compartido, EstadoChip, Etiqueta } from "@/components/Estado";
 import ControlStock from "@/components/ControlStock";
@@ -58,8 +59,18 @@ export default async function FichaInstrumental({ params }: { params: Promise<{ 
           </Link>{" "}
           / {inst.codigo}
         </p>
-        <h1 className="titulo text-4xl">{inst.nombre}</h1>
-        {inst.alias && <p className="text-tenue">{inst.alias}</p>}
+        <div className="flex items-center gap-4">
+          <FotoInstrumental
+            codigo={inst.codigo}
+            nombre={inst.nombre}
+            archivoId={archivos.find((a) => a.vigente && IMAGENES.includes(a.tipo))?.id}
+            tam="w-28 h-28 sm:w-36 sm:h-36"
+          />
+          <div className="min-w-0">
+            <h1 className="titulo text-4xl">{inst.nombre}</h1>
+            {inst.alias && <p className="text-tenue">{inst.alias}</p>}
+          </div>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <EstadoChip estado={est.estado} />
           {est.falta && <span className="text-sm text-tenue">{est.falta}</span>}

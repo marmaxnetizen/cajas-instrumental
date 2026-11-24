@@ -6,6 +6,7 @@ import { IMAGENES } from "@/lib/formato";
 import type { TipoInstrumental } from "@/lib/tipos";
 import { Compartido, EstadoChip, Etiqueta } from "@/components/Estado";
 import FormAccion from "@/components/FormAccion";
+import FotoInstrumental from "@/components/FotoInstrumental";
 import { crearInstrumental } from "./acciones";
 
 const PESTANAS: { tipo: TipoInstrumental; label: string }[] = [
@@ -91,16 +92,7 @@ export default async function InstrumentalPage({ searchParams }: { searchParams:
             return (
               <li key={i.id}>
                 <Link href={`/instrumental/${i.id}`} className="card p-3 flex gap-3 h-full hover:border-acento">
-                  <div className="w-20 h-20 shrink-0 rounded bg-superficie-2 grid place-items-center overflow-hidden">
-                    {foto ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={`/archivos/${foto}`} alt="" className="w-full h-full object-cover" loading="lazy" />
-                    ) : (
-                      <span aria-hidden="true" className="font-mono text-xs text-tenue">
-                        {i.codigo}
-                      </span>
-                    )}
-                  </div>
+                  <FotoInstrumental codigo={i.codigo} nombre={i.nombre} archivoId={foto} />
                   <div className="min-w-0 space-y-1">
                     <p className="font-mono text-xs text-tenue">{i.codigo}</p>
                     <p className="font-semibold leading-tight">{i.nombre}</p>

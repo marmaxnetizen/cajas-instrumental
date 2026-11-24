@@ -7,6 +7,7 @@ import { estadoEnCaja, filasComponentes, nombreComponente, TIPO_LABEL } from "@/
 import { seVeEnLaWeb } from "@/lib/formato";
 import type { Nota, TipoInstrumental } from "@/lib/tipos";
 import { ProveedorAvisos } from "@/components/Aviso";
+import FotoInstrumental from "@/components/FotoInstrumental";
 import ControlStock from "@/components/ControlStock";
 import { EstadoChip } from "@/components/Estado";
 import TextoFormato from "@/components/TextoFormato";
@@ -98,7 +99,8 @@ function Cargar({ caja, comp }: { caja: string; comp: Comp }) {
               return (
                 <article key={inst.id} className="card p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
-                    <div>
+                    <FotoInstrumental codigo={inst.codigo} nombre={inst.nombre} tam="w-16 h-16" />
+                    <div className="flex-1 min-w-0">
                       <h3 className="font-semibold text-lg leading-tight">{inst.nombre}</h3>
                       <p className="font-mono text-xs text-tenue">
                         {inst.codigo} · {cantPorCaja} por caja
